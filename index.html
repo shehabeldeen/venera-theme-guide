@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Venera theme for Salla — setup, home blocks, product data formats, build-your-box and support.">
+<title>Venera Theme Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500;1,600&display=swap">
+<style>
+/* Layout: a documentation page — sticky contents rail beside one reading column; one column on phones */
+:root {
+  --bg: #f8f1ed; --surface: #ffffff; --ink: #2a1418; --ink-2: #5d4a4d; --ink-3: #8e7a7d;
+  --wine: #7a1230; --blush: #f1dcd6; --line: #ead7d1; --code-bg: #f3e6e2;
+  --display: "El Messiri", "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  --body: "IBM Plex Sans Arabic", "Segoe UI", Tahoma, sans-serif;
+  --latin: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #1a0f12; --surface: #241519; --ink: #f4e8e9; --ink-2: #d4c0c3; --ink-3: #a8949a;
+  --wine: #e79bb0; --blush: #3a2027; --line: #3b262b; --code-bg: #2f1b20; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #1a0f12; --surface: #241519; --ink: #f4e8e9; --ink-2: #d4c0c3; --ink-3: #a8949a;
+  --wine: #e79bb0; --blush: #3a2027; --line: #3b262b; --code-bg: #2f1b20; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.85; padding-inline: 16px; padding-block: 0 64px; }
+a { color: var(--wine); }
+code, .k { font-family: var(--mono); font-size: .86em; background: var(--code-bg); padding: 1px 6px; border-radius: 6px; direction: ltr; unicode-bidi: isolate; }
+.wrap { max-width: 1120px; margin: 0 auto; }
+
+/* header */
+.top { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 22px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+.brand { display: flex; align-items: baseline; gap: 12px; }
+.brand b { font-family: var(--display); font-size: 26px; letter-spacing: .01em; }
+.brand i { font-family: var(--latin); color: var(--wine); font-size: 19px; }
+.langs { display: inline-flex; padding: 4px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); gap: 2px; }
+.langs button { border: 0; background: none; font: 600 13.5px var(--body); color: var(--ink-2); padding: 6px 16px; border-radius: 999px; cursor: pointer; }
+.langs button[aria-pressed="true"] { background: var(--wine); color: var(--bg); }
+.langs button:focus-visible, .toc a:focus-visible { outline: 2px solid var(--wine); outline-offset: 2px; }
+
+.hero { padding-block: 40px 18px; max-width: 760px; }
+.eyebrow { font-family: var(--latin); font-style: italic; color: var(--wine); font-size: 18px; }
+h1 { font-family: var(--display); font-size: clamp(32px, 5vw, 48px); line-height: 1.2; margin: 6px 0 12px; text-wrap: balance; }
+.lead { color: var(--ink-2); font-size: 17px; margin: 0; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.facts span { font-size: 13px; padding: 3px 12px; border-radius: 999px; background: var(--blush); color: var(--ink-2); }
+
+/* body grid */
+.grid { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 48px; margin-top: 26px; align-items: start; }
+.toc { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 20px); display: grid; gap: 2px; font-size: 14.5px; }
+.toc a { color: var(--ink-2); text-decoration: none; padding: 6px 12px; border-radius: 10px; }
+.toc a:hover { background: var(--blush); color: var(--ink); }
+main { min-width: 0; max-width: 760px; }
+section { padding-block: 10px 30px; border-bottom: 1px solid var(--line); }
+section:last-child { border-bottom: 0; }
+h2 { font-family: var(--display); font-size: 27px; line-height: 1.35; margin: 18px 0 8px; text-wrap: balance; }
+h3 { font-family: var(--display); font-size: 19px; margin: 22px 0 6px; }
+p { margin: 8px 0; color: var(--ink-2); }
+ol, ul { padding-inline-start: 1.3em; color: var(--ink-2); }
+li { margin: 4px 0; } li::marker { color: var(--wine); }
+
+.table { overflow-x: auto; margin: 14px 0; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+table { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 560px; }
+th, td { text-align: start; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; color: var(--ink); background: var(--code-bg); font-size: 13.5px; }
+tr:last-child td { border-bottom: 0; }
+td:first-child { color: var(--ink); font-weight: 500; white-space: nowrap; }
+
+.blocks { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin: 14px 0; padding: 0; list-style: none; }
+.blocks li { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; font-size: 14px; color: var(--ink-2); }
+.blocks b { display: block; color: var(--ink); font-size: 15px; margin-bottom: 2px; }
+
+.note { margin: 16px 0; padding: 14px 16px; border-radius: 14px; background: var(--blush); color: var(--ink); font-size: 15px; }
+.note b { color: var(--wine); }
+.contact { display: grid; gap: 8px; margin-top: 12px; }
+.contact div { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+.contact span { color: var(--ink-3); min-width: 90px; font-size: 14px; }
+.contact strong { font-weight: 600; user-select: all; direction: ltr; unicode-bidi: isolate; }
+
+[data-l="en"] { font-family: var(--body); }
+@media (max-width: 820px) { .grid { grid-template-columns: minmax(0, 1fr); gap: 8px; } .toc { position: static; display: flex; flex-wrap: wrap; } }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+<style>body{margin:0} img{max-width:100%} [hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><b>فينرا</b><i>Venera</i></div>
+    <div class="langs" role="group" aria-label="Language / اللغة">
+      <button type="button" id="btn-ar" data-set="ar" aria-pressed="true">العربية</button>
+      <button type="button" id="btn-en" data-set="en" aria-pressed="false">English</button>
+    </div>
+  </header>
+
+  <!-- ===================== العربية ===================== -->
+  <div data-l="ar" lang="ar" dir="rtl">
+    <div class="hero">
+      <span class="eyebrow">Theme guide</span>
+      <h1>دليل ثيم فينرا لمنصة سلة</h1>
+      <p class="lead">ثيم مصمّم لمتاجر العطور وزيوت التعطير والأجهزة المنزلية: واجهة عربية أولًا، هوية نبيذية ووردية، وأدوات بيع خاصة بالعطور مثل هرم النفحات وصندوق العطور واختبار اكتشاف العطر.</p>
+      <div class="facts"><span>Salla Twilight</span><span>عربي وإنجليزي</span><span>RTL / LTR</span><span>13 عنصرًا للرئيسية</span><span>معرّف الثيم 56729909</span></div>
+    </div>
+    <div class="grid">
+      <nav class="toc" aria-label="المحتويات">
+        <a href="#start">البدء والإعدادات</a><a href="#blocks">عناصر الرئيسية</a><a href="#data">إعداد المنتجات</a><a href="#box">صندوق العطور</a><a href="#pages">صفحات المتجر</a><a href="#support">الدعم</a>
+      </nav>
+      <main>
+        <section id="start">
+          <h2>البدء والإعدادات</h2>
+          <ol>
+            <li>ثبّت الثيم من رابط التثبيت ثم افتح <b>تخصيص الثيم</b>.</li>
+            <li>من إعدادات الثيم ارفع الشعارات: <code>header_logo</code> لرأس الصفحة، <code>footer_logo</code> للتذييل، و<code>brand_mark</code> لعلامة الزهرة الصغيرة التي تظهر فوق العناوين وفي الصفحات الداخلية.</li>
+            <li>اختر لون الهوية من <code>venera_accent</code>: نبيذي، برقوقي، ذهبي، زمردي أو كحلي. يعمل هذا اللون مستقلًا عن لون المتجر في سلة.</li>
+            <li>اترك <code>venera_demo</code> مفعّلًا أثناء التجهيز ليعرض كل عنصر محتوى نموذجيًا حتى تضيف محتواك، ثم أوقفه عند الإطلاق.</li>
+            <li>أنشئ قائمة رأس الصفحة وأضف روابط مباشرة لأقسام الرئيسية مثل <code>#collection</code> و<code>#bundles</code> و<code>#gifts</code> و<code>#business</code>. أي عنصر يحتوي <code>[-38%]</code> في اسمه يظهر كشارة.</li>
+          </ol>
+        </section>
+
+        <section id="blocks">
+          <h2>عناصر الصفحة الرئيسية</h2>
+          <p>تظهر في المحرّر باسم يبدأ بـ «فينرا ·». كل عنصر يعمل بمحتوى نموذجي إذا تُرك فارغًا.</p>
+          <ul class="blocks">
+            <li><b>البطل التفاعلي</b>واجهة مقوّسة بصورة المنتج ونفحات عائمة وزر تسوّق.</li>
+            <li><b>شريط متحرك</b>كلمات أو أسماء عطور تتحرك أفقيًا.</li>
+            <li><b>دوائر التصنيفات</b>أيقونات للأقسام؛ الرابط الفارغ ينقل للقسم المناسب في الرئيسية.</li>
+            <li><b>شبكة المنتجات مع تصفية</b>أزرار العائلات العطرية مع عدد المنتجات وتصفية فورية بلا إعادة تحميل.</li>
+            <li><b>منتج مميز مع هرم النفحات</b>معرض صور وهرم النفحات وخط زمني لتطور الرائحة.</li>
+            <li><b>اختبار اكتشاف العطر</b>ثلاثة أسئلة ترشّح العطر المناسب للمكان والمزاج.</li>
+            <li><b>حاسبة المساحة والجهاز</b>تقترح الجهاز وعدد العبوات حسب مساحة المكان.</li>
+            <li><b>كوّن باقتك</b>اختيار 3 أو 4 أو 6 عبوات مع التوفير المباشر (انظر قسم صندوق العطور).</li>
+            <li><b>قصة العلامة</b>صورة وقصة وأرقام متحركة.</li>
+            <li><b>تغليف الهدايا</b>بطاقة إهداء يكتبها العميل مع معاينة حية.</li>
+            <li><b>قصص قابلة للتسوق</b>قصص بصور كاملة مع زر للمنتج.</li>
+            <li><b>حلول الأعمال</b>عرض للفنادق والمكاتب مع زر تواصل.</li>
+            <li><b>شريط الثقة</b>الشحن والاسترجاع والدفع في سطر واحد.</li>
+          </ul>
+        </section>
+
+        <section id="data">
+          <h2>إعداد المنتجات</h2>
+          <p>الثيم يقرأ حقول سلة العادية، فلا يحتاج تطبيقات إضافية. اتّبع هذه الصيغ لتظهر العناصر الخاصة بالعطور:</p>
+          <div class="table"><table>
+            <thead><tr><th>الحقل في سلة</th><th>طريقة التعبئة</th><th>ما يظهر في المتجر</th></tr></thead>
+            <tbody>
+              <tr><td>اسم المنتج</td><td><code>سيزون Season</code></td><td>الاسم العربي بخط عريض واللاتيني بخط مائل بجانبه.</td></tr>
+              <tr><td>التصنيف</td><td>تصنيف رئيسي (زيوت التعطير) وتحته تصنيفات العائلات: زهري، شرقي، منعش، حلو، خشبي، بودري</td><td>اسم العائلة بلون خاص، وأزرار تصفية في الرئيسية وصفحة التصنيف.</td></tr>
+              <tr><td>العنوان الفرعي</td><td><code>زهر الكرز · فاوانيا · مسك أبيض</code></td><td>شارات النفحات؛ الضغط على أي نفحة يعرض كل العطور التي تحتويها.</td></tr>
+              <tr><td>الوصف</td><td>أسطر تبدأ بـ <code>القمة:</code> و<code>القلب:</code> و<code>القاعدة:</code></td><td>هرم النفحات والخط الزمني لتطور العطر في صفحة المنتج.</td></tr>
+              <tr><td>الوسوم</td><td><code>شدة 1</code> أو <code>شدة 2</code> أو <code>شدة 3</code></td><td>أعمدة شدة العطر. هذا الوسم لا يظهر للعملاء.</td></tr>
+              <tr><td>خيارات المنتج</td><td>خيار باسم <code>الحجم</code> بقيم مثل <code>100 مل</code>، والسعر والمخزون على كل قيمة</td><td>أزرار الأحجام في البطاقة وصفحة المنتج، والسعر يتغير مع الحجم.</td></tr>
+              <tr><td>نص بديل للصور</td><td><code>سيزون 500 مل</code></td><td>تتبدّل صورة المنتج عند اختيار الحجم.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section id="box">
+          <h2>صندوق العطور «كوّن باقتك»</h2>
+          <ul>
+            <li>إذا لم تختر منتجات في إعدادات العنصر، يحمّل الثيم تلقائيًا كل منتجات أول تصنيف له تصنيفات فرعية (مثل زيوت التعطير).</li>
+            <li>حجم العبوة يؤخذ من سطر الملخص، مثلًا <code>زيت 500 مل</code> يختار قيمة 500 مل من خيار الحجم، وتُضاف للسلة بهذا الحجم وسعره.</li>
+            <li>المستويات (3 و4 و6 عبوات) ونسبة الخصم المعروضة تُعدّل من إعدادات العنصر.</li>
+            <li>يمكن إضافة منتج اختياري للصندوق (مثل جهاز تعطير) مع نسبة خصم معروضة.</li>
+          </ul>
+          <p class="note"><b>مهم:</b> الثيم يعرض التوفير فقط. لتطبيق الخصم فعليًا في السلة، أنشئ من لوحة سلة <b>عرضًا خاصًا</b> (العروض الخاصة) بنفس الشروط والنِّسب.</p>
+        </section>
+
+        <section id="pages">
+          <h2>صفحات المتجر</h2>
+          <h3>صفحة التصنيف</h3>
+          <p>شريط العائلات يصفّي المنتجات في مكانها مع تحديث العنوان ومسار التنقل وزر الرجوع. يظهر عدد المنتجات على كل زر، ورابط مثل <code>?note=مسك</code> يفتح الصفحة على نفحة معيّنة.</p>
+          <h3>صفحة المنتج</h3>
+          <p>معرض بإطار مقوّس، أزرار الأحجام، زر الإضافة للسلة و«اشترِ الآن»، هرم النفحات، بطاقة العطر (العائلة والشدة والأحجام والنفحات)، وعرض صندوق العطور. إذا لم توجد منتجات مشابهة في سلة، تُعرض باقي عطور نفس المجموعة.</p>
+          <h3>السلة والصفحات الداخلية</h3>
+          <p>السلة والصفحات التعريفية والمدونة والعلامات التجارية وآراء العملاء وصفحة الشكر وحساب العميل كلها تبدأ بنفس شريط العنوان وتستخدم ألوان الهوية وبطاقاتها.</p>
+        </section>
+
+        <section id="support">
+          <h2>الدعم</h2>
+          <p>للمساعدة في التثبيت أو التخصيص:</p>
+          <div class="contact">
+            <div><span>البريد</span><strong>shehab@shehabelden.com</strong></div>
+            <div><span>واتساب</span><strong>+966 50 414 3009</strong> <a href="https://wa.me/966504143009" target="_blank" rel="noopener">فتح المحادثة</a></div>
+            <div><span>الموقع</span><a href="https://www.shehabelden.com/" target="_blank" rel="noopener">shehabelden.com</a></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- ===================== English ===================== -->
+  <div data-l="en" lang="en" dir="ltr" hidden>
+    <div class="hero">
+      <span class="eyebrow">Theme guide</span>
+      <h1>Venera for Salla</h1>
+      <p class="lead">A theme built for perfume, diffuser-oil and home-fragrance stores: Arabic-first, a wine and blush identity, and fragrance-specific selling tools such as a notes pyramid, a build-your-box bundle and a scent finder quiz.</p>
+      <div class="facts"><span>Salla Twilight</span><span>Arabic &amp; English</span><span>RTL / LTR</span><span>13 home blocks</span><span>Theme ID 56729909</span></div>
+    </div>
+    <div class="grid">
+      <nav class="toc" aria-label="Contents">
+        <a href="#start-en">Setup &amp; settings</a><a href="#blocks-en">Home blocks</a><a href="#data-en">Product data</a><a href="#box-en">Build your box</a><a href="#pages-en">Store pages</a><a href="#support-en">Support</a>
+      </nav>
+      <main>
+        <section id="start-en">
+          <h2>Setup &amp; settings</h2>
+          <ol>
+            <li>Install the theme from its install link and open <b>Customize theme</b>.</li>
+            <li>In the theme settings upload the logos: <code>header_logo</code> for the header, <code>footer_logo</code> for the footer and <code>brand_mark</code> for the small blossom mark shown above headings and on inner pages.</li>
+            <li>Pick the identity colour in <code>venera_accent</code>: wine, plum, gold, emerald or navy. It works independently of the Salla store colour.</li>
+            <li>Keep <code>venera_demo</code> on while you set up so every block shows sample content until you add yours; turn it off at launch.</li>
+            <li>Create the header menu with links to home sections such as <code>#collection</code>, <code>#bundles</code>, <code>#gifts</code> and <code>#business</code>. A menu item whose name contains <code>[-38%]</code> shows it as a badge.</li>
+          </ol>
+        </section>
+
+        <section id="blocks-en">
+          <h2>Home blocks</h2>
+          <p>They appear in the editor with names starting “فينرا ·”. Each block shows sample content when left empty.</p>
+          <ul class="blocks">
+            <li><b>Interactive hero</b>Arched product image, floating notes and a shop button.</li>
+            <li><b>Marquee</b>Scent names or words scrolling sideways.</li>
+            <li><b>Category circles</b>Section icons; an empty link scrolls to the matching home section.</li>
+            <li><b>Filterable product grid</b>Scent-family chips with product counts, filtering in place.</li>
+            <li><b>Product spotlight</b>Gallery, notes pyramid and an evolving-scent timeline.</li>
+            <li><b>Scent finder</b>Three questions that recommend a scent for the space and mood.</li>
+            <li><b>Coverage calculator</b>Suggests the device and bottle count for a room size.</li>
+            <li><b>Build your box</b>3, 4 or 6 bottles with the saving shown live (see below).</li>
+            <li><b>Brand story</b>Image, story and animated figures.</li>
+            <li><b>Gift wrapping</b>A gift card the shopper writes, with a live preview.</li>
+            <li><b>Shoppable stories</b>Full-screen stories with a product button.</li>
+            <li><b>Business solutions</b>An offer for hotels and offices with a contact button.</li>
+            <li><b>Trust strip</b>Shipping, returns and payment in one line.</li>
+          </ul>
+        </section>
+
+        <section id="data-en">
+          <h2>Product data</h2>
+          <p>The theme reads standard Salla fields, so no extra apps are needed. Use these formats to unlock the fragrance features:</p>
+          <div class="table"><table>
+            <thead><tr><th>Salla field</th><th>How to fill it</th><th>What the store shows</th></tr></thead>
+            <tbody>
+              <tr><td>Product name</td><td><code>سيزون Season</code></td><td>Arabic name in bold with the Latin name in italics beside it.</td></tr>
+              <tr><td>Category</td><td>A main category (e.g. diffuser oils) with family sub-categories: floral, oriental, fresh, sweet, woody, powdery</td><td>A coloured family label and filter chips on the home and category pages.</td></tr>
+              <tr><td>Subtitle</td><td><code>زهر الكرز · فاوانيا · مسك أبيض</code></td><td>Note chips; tapping a note lists every scent that contains it.</td></tr>
+              <tr><td>Description</td><td>Lines starting with <code>القمة:</code>, <code>القلب:</code> and <code>القاعدة:</code> (top, heart, base)</td><td>The notes pyramid and evolving-scent timeline on the product page.</td></tr>
+              <tr><td>Tags</td><td><code>شدة 1</code>, <code>شدة 2</code> or <code>شدة 3</code></td><td>Intensity bars. This tag is hidden from shoppers.</td></tr>
+              <tr><td>Product options</td><td>An option named <code>الحجم</code> with values like <code>100 مل</code>, price and stock on each value</td><td>Size pills on cards and the product page; the price follows the size.</td></tr>
+              <tr><td>Image alt text</td><td><code>سيزون 500 مل</code></td><td>The product photo switches with the selected size.</td></tr>
+            </tbody>
+          </table></div>
+        </section>
+
+        <section id="box-en">
+          <h2>Build your box</h2>
+          <ul>
+            <li>With no products picked in the block settings, the theme loads every product of the first category that has sub-categories (for example diffuser oils).</li>
+            <li>The bottle size comes from the summary line: <code>زيت 500 مل</code> selects the 500 ml value of the size option and adds it to the cart at that size and price.</li>
+            <li>Tiers (3, 4 and 6 bottles) and the displayed discount are set in the block settings.</li>
+            <li>An optional add-on product (such as a diffuser) can join the box with its own displayed discount.</li>
+          </ul>
+          <p class="note"><b>Important:</b> the theme only displays the saving. To apply the discount in the cart, create a matching <b>Special offer</b> in the Salla dashboard with the same rules and percentages.</p>
+        </section>
+
+        <section id="pages-en">
+          <h2>Store pages</h2>
+          <h3>Category page</h3>
+          <p>The family rail filters products in place and updates the title, breadcrumb and back button. Each chip shows its product count, and a link such as <code>?note=مسك</code> opens the page on one note.</p>
+          <h3>Product page</h3>
+          <p>Arched gallery, size pills, add to cart and buy now, notes pyramid, a scent card (family, intensity, sizes, notes) and the build-your-box offer. When Salla has no related products, the other scents of the same collection are shown.</p>
+          <h3>Cart and inner pages</h3>
+          <p>The cart, information pages, blog, brands, testimonials, thank-you page and customer account all open with the same title band and use the theme's colours and cards.</p>
+        </section>
+
+        <section id="support-en">
+          <h2>Support</h2>
+          <p>For help with installation or customization:</p>
+          <div class="contact">
+            <div><span>Email</span><strong>shehab@shehabelden.com</strong></div>
+            <div><span>WhatsApp</span><strong>+966 50 414 3009</strong> <a href="https://wa.me/966504143009" target="_blank" rel="noopener">Open chat</a></div>
+            <div><span>Website</span><a href="https://www.shehabelden.com/" target="_blank" rel="noopener">shehabelden.com</a></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var views = document.querySelectorAll('[data-l]');
+  function setLang(l, remember) {
+    views.forEach(function (v) { v.hidden = v.getAttribute('data-l') !== l; });
+    document.documentElement.lang = l; document.documentElement.dir = l === 'ar' ? 'rtl' : 'ltr';
+    document.querySelectorAll('[data-set]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-set') === l)); });
+    if (remember) { try { localStorage.setItem('venera-guide-lang', l); } catch (e) {} }
+  }
+  document.querySelectorAll('[data-set]').forEach(function (b) { b.addEventListener('click', function () { setLang(b.getAttribute('data-set'), true); }); });
+  var start = location.hash === '#en' || /-en$/.test(location.hash) ? 'en' : null;
+  if (!start) { try { start = localStorage.getItem('venera-guide-lang'); } catch (e) {} }
+  setLang(start === 'en' ? 'en' : 'ar', false);
+})();
+</script>
+</body>
+</html>
